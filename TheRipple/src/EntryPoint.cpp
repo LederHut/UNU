@@ -1,4 +1,4 @@
-#include "pch\pch.h"
+#include "pch/pch.h"
 #include "EntryPoint.h"
 
 
@@ -6,6 +6,7 @@ EntryPoint::EntryPoint():
 	Window(nullptr)
 {
 	glfwinit();
+	gladinit();
 }
 
 EntryPoint::~EntryPoint()
@@ -35,6 +36,9 @@ void EntryPoint::glfwinit()
 {
 	/* Initialize the library */
 	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
 	Window = glfwCreateWindow(640, 480, "The-Ripple", NULL, NULL);
@@ -46,4 +50,12 @@ void EntryPoint::glfwinit()
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(Window);
+}
+
+void EntryPoint::gladinit()
+{
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+	}
 }

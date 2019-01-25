@@ -1,4 +1,5 @@
 #pragma once
+
 class EntryPoint
 {
 
@@ -14,6 +15,7 @@ private:
 	GLFWwindow* Window;
 
 	void glfwinit();
+	void gladinit();
 
 };
 
