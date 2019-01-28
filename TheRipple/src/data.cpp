@@ -12,6 +12,7 @@ data::~data()
 
 }
 
+//Binds the created buffer.
 void data::CreateVertexBuffer(GLsizei amount, std::vector<float> data)
 {
 	VBOs.push_back(0);
@@ -20,6 +21,7 @@ void data::CreateVertexBuffer(GLsizei amount, std::vector<float> data)
 	glBufferData(GL_ARRAY_BUFFER, data.size(), data.data(), GL_STATIC_DRAW);
 }
 
+//Binds the created array.
 void data::CreateVertexArray(GLsizei amount)
 {
 	VAOs.push_back(0);
@@ -27,6 +29,7 @@ void data::CreateVertexArray(GLsizei amount)
 	glBindVertexArray(VAOs.back());
 }
 
+//Adds to the current bound buffer.
 void data::AddAttribPointer(GLint size, GLuint type, GLboolean normalized,GLsizei stride,const void* pointer )
 {
 	glEnableVertexAttribArray(ac);

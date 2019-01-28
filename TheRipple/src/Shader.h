@@ -8,9 +8,14 @@ public:
 	Shader();
 	~Shader();
 
+	void LoadShader(std::string name, GLuint type);
+
 private:
 
-	void LoadShader(std::string name);
-	std::string ReadFile(std::string name);
+	GLuint VerID;
+	GLuint FragID;
+	GLuint ShaderProg;
+	
+	std::string ReadFile(std::string name , std::string type);
 };
 
