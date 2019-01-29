@@ -1,7 +1,9 @@
 #pragma once
 #include "pch/pch.h"
+#include "Shader.h"
 
-class data
+class data :
+	public Shader
 {
 public:
 

@@ -13,7 +13,7 @@ Shader::~Shader()
 }
 
 //Loads and Compiles Shader
-void Shader::LoadShader(std::string name, GLuint type)
+void Shader::Load(std::string name, GLuint type)
 {
 
 	if (type == GL_VERTEX_SHADER)
@@ -62,6 +62,19 @@ void Shader::LoadShader(std::string name, GLuint type)
 	}
 
 	
+}
+
+void Shader::Link()
+{
+	glAttachShader(ShaderProg,VerID);
+	glAttachShader(ShaderProg, FragID);
+
+	glLinkProgram(ShaderProg);
+}
+
+void Shader::Use()
+{
+	glUseProgram(ShaderProg);
 }
 
 std::string Shader::ReadFile(std::string name, std::string type)

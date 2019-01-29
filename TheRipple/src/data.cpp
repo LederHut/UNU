@@ -4,7 +4,7 @@
 data::data()
 	:ac(0)
 {
-
+	
 }
 
 data::~data()

@@ -8,10 +8,13 @@ public:
 	Shader();
 	~Shader();
 
-	void LoadShader(std::string name, GLuint type);
+	void Load(std::string name, GLuint type);
+	void Link();
+	void Use();
 
 private:
 
+	
 	GLuint VerID;
 	GLuint FragID;
 	GLuint ShaderProg;
