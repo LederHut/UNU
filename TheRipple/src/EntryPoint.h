@@ -15,6 +15,8 @@ private:
 
 	GLFWwindow* Window;
 
+	std::vector<data> dv;
+
 	void glfwinit();
 	void gladinit();
 

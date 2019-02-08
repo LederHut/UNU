@@ -1,6 +1,9 @@
 #include "data.h"
 #include "pch/pch.h"
 
+//The data class provides an simple wraper for creating buffer and the respective attrib pointer.
+//it can hold as many shader, VBOs, VAOs, and attrib pointers as needed.
+
 data::data()
 	:ac(0)
 {
@@ -18,7 +21,7 @@ void data::CreateVertexBuffer(GLsizei amount, std::vector<float> data)
 	VBOs.push_back(0);
 	glGenBuffers(amount, &VBOs.back());
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs.back());
-	glBufferData(GL_ARRAY_BUFFER, data.size(), data.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data.data(), GL_STATIC_DRAW);
 }
 
 //Binds the created array.
@@ -55,7 +58,5 @@ void data::Bind(GLuint type, GLuint index)
 
 void data::UnBind()
 {
-
-	//Not in use right now.
-
+	//not in use right now.
 }

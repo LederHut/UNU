@@ -13,97 +13,71 @@ Shader::~Shader()
 }
 
 //Loads and Compiles Shader
-void Shader::Load(std::string name, GLuint type)
+void Shader::LoadShader(std::string name, GLuint type)
 {
+	GLint success;
+	GLchar infoLog[512];
 
 	if (type == GL_VERTEX_SHADER)
 	{
-		glShaderSource(VerID, 1, (const GLchar**)ReadFile(name, ".ver").c_str() , NULL);
+		//last time I was here
+		std::ifstream fin("src\\shader\\" + name + ".ver");
+		std::stringstream buff;
+		buff << fin.rdbuf();
+		const std::string str = buff.str();
+		const char* src = str.c_str();
 
-		glCompileShader(VerID);
+		GLCall(glShaderSource(VerID, 1, (const GLchar**)&src, NULL));
 
-		GLint isCompiled = 0;
-		glGetShaderiv(VerID, GL_COMPILE_STATUS, &isCompiled);
-		if (!isCompiled) 
+		GLCall(glCompileShader(VerID));
+
+		glGetShaderiv(VerID, GL_COMPILE_STATUS, &success);
+		if (!success)
 		{
-			GLint logLength;
-			glGetShaderiv(VerID, GL_INFO_LOG_LENGTH, &logLength);
-
-			std::vector<GLchar> log;
-			log.resize(logLength);
-			glGetShaderInfoLog(VerID, logLength, &logLength, log.data());
-
-			std::ofstream fout(std::string("FRAG") + ".log");
-			fout.write(log.data(), logLength);
-
+			glGetShaderInfoLog(FragID, 512, NULL, infoLog);
+			std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 		}
 	}
 	else if (type == GL_FRAGMENT_SHADER)
 	{
-		glShaderSource(FragID, 1, (const GLchar**)ReadFile(name, ".frag").c_str(), NULL);
+		std::ifstream fin("src\\shader\\" + name + ".frag");
+		std::stringstream buff;
+		buff << fin.rdbuf();
+		const std::string str = buff.str();
+		const char* src = str.c_str();
 
-		glCompileShader(FragID);
+		GLCall(glShaderSource(FragID, 1, (const GLchar**)&src, NULL));
 
-		GLint isCompiled = 0;
-		glGetShaderiv(FragID, GL_COMPILE_STATUS, &isCompiled);
-		if (!isCompiled) 
+		GLCall(glCompileShader(FragID));
+
+		glGetShaderiv(FragID, GL_COMPILE_STATUS, &success);
+		if (!success)
 		{
-			GLint logLength;
-			glGetShaderiv(FragID, GL_INFO_LOG_LENGTH, &logLength);
-
-			std::vector<GLchar> log;
-			log.resize(logLength);
-			glGetShaderInfoLog(FragID, logLength, &logLength, log.data());
-
-			std::ofstream fout(std::string("FRAG") + ".log");
-			fout.write(log.data(), logLength);
-			
+			glGetShaderInfoLog(FragID, 512, NULL, infoLog);
+			std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 		}
 	}
-
-	
 }
 
-void Shader::Link()
+void Shader::LinkShader()
 {
-	glAttachShader(ShaderProg,VerID);
+	glAttachShader(ShaderProg, VerID);
 	glAttachShader(ShaderProg, FragID);
 
 	glLinkProgram(ShaderProg);
+
+	glDeleteShader(VerID);
+	glDeleteShader(FragID);
 }
 
-void Shader::Use()
+void Shader::UseShader()
 {
-	glUseProgram(ShaderProg);
+	GLCall(glUseProgram(ShaderProg));
 }
 
 std::string Shader::ReadFile(std::string name, std::string type)
 {
-	std::string content;
-	std::string line("");
-	std::ifstream myfile;
+	
 
-	char errorstr[255];
-
-	myfile.open("src\\" + name + type , std::fstream::out);
-	if (myfile.bad())
-	{
-		std::cerr << "Error: " << strerror_s(errorstr,errno);
-		
-	}
-
-	if (myfile.is_open())
-	{
-		while (myfile.good())
-		{
-			std::getline(myfile, line);
-			content += "\n" + line;
-		}
-		myfile.close();
-	}
-	else
-	{
-		std::cout << "Unable to open file";
-	}
-	return content;
+	return std::string();
 }

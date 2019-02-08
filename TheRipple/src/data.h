@@ -25,7 +25,7 @@ private:
 	std::vector<GLuint> VAOs;
 	std::vector<GLuint> EBOs;
 
-	GLuint ac;
+	GLuint ac; //Attrib pointer counter
 
 };
 
