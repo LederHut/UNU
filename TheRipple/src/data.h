@@ -10,7 +10,7 @@ public:
 	data();
 	~data();
 
-	void CreateVertexBuffer(GLsizei amount, std::vector<float> data);
+	void CreateVertexBuffer(GLsizei amount, std::vector<float> data, GLuint usage);
 
 	void CreateVertexArray(GLsizei amount);
 

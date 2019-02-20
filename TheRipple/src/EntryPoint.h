@@ -1,5 +1,5 @@
 #pragma once
-#include "data.h"
+#include "Particle.h"
 
 class EntryPoint
 {
@@ -17,8 +17,13 @@ private:
 
 	std::vector<data> dv;
 
+	double mousex, mousey;
+	int releasd;
+
 	void glfwinit();
 	void gladinit();
+
+	void input();
 
 };
 

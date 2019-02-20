@@ -2,6 +2,7 @@
 
 //Utility
 #include "Renderer.h"
+#include "Utility.h"
 
 //C++ libs
 #include <iostream>
@@ -9,6 +10,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <chrono>
 
 //OpenGL stuff
 #include <glad/glad.h>

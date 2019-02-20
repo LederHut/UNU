@@ -16,12 +16,12 @@ data::~data()
 }
 
 //Binds the created buffer.
-void data::CreateVertexBuffer(GLsizei amount, std::vector<float> data)
+void data::CreateVertexBuffer(GLsizei amount, std::vector<float> data, GLuint usage)
 {
 	VBOs.push_back(0);
 	glGenBuffers(amount, &VBOs.back());
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs.back());
-	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, data.size() , data.data(), usage);
 }
 
 //Binds the created array.
