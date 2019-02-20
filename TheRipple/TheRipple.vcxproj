@@ -144,7 +144,6 @@
     <ClCompile Include="vendor\GLAD\src\glad.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Particle.h" />
     <ClInclude Include="src\data.h" />
     <ClInclude Include="src\EntryPoint.h" />
