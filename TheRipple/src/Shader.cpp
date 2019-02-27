@@ -75,9 +75,22 @@ void Shader::UseShader()
 	GLCall(glUseProgram(ShaderProg));
 }
 
-std::string Shader::ReadFile(std::string name, std::string type)
+void Shader::SetUniform4f(const std::string& name, glm::fvec4 color)
 {
-	
+	GLCall(glUniform4f(GetUnifromLocation(name), color.x, color.y, color.z, color.w));
+}
 
-	return std::string();
+void Shader::SetUniformMat4f(const std::string & name, glm::mat4 & matrix)
+{
+	GLCall(glUniformMatrix4fv(GetUnifromLocation(name), 1, GL_FALSE, &matrix[0][0]));
+}
+
+int Shader::GetUnifromLocation(const std::string& name)
+{
+	GLCall(int location = glGetUniformLocation(ShaderProg, name.c_str()));
+	if (location == -1)
+	{
+		std::cout << "Warning: uniform '" << name << "' doesn't exsist!" << std::endl;
+	}
+	return location;
 }

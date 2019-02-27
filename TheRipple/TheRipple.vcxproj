@@ -153,6 +153,10 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Utility.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shader\FShader.frag" />
+    <None Include="src\shader\VShader.ver" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

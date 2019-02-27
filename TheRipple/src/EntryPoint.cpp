@@ -1,10 +1,12 @@
 #include "pch/pch.h"
 #include "EntryPoint.h"
 
-
+#define SCREEN_WITDH 800.0f
+#define SCREEN_HEIGTH 600.0f
 
 EntryPoint::EntryPoint() :
 	Window(nullptr),
+	p(nullptr),
 	mousex(0),
 	mousey(0),
 	releasd(1)
@@ -12,11 +14,10 @@ EntryPoint::EntryPoint() :
 	glfwinit();
 	gladinit();
 
+	p = new Particle();
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	Particle p(TR_NONE, 1.0f);
-	
-	dv.push_back(p);
 }
 
 EntryPoint::~EntryPoint()
@@ -31,16 +32,30 @@ bool EntryPoint::Run()
 	
 	while (!glfwWindowShouldClose(Window))
 	{
-		input();
 		
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//draw our first triangle
-		dv[0].UseShader();
-		dv[0].Bind(GL_VERTEX_ARRAY ,0);
-		// for some reason there is a point in the middle don't know why
-		glDrawArrays(GL_POINTS, 0, 359);
+		p->UseShader();
+		p->Bind(GL_VERTEX_ARRAY, 0);
+
+		//glm::mat4 model(1.0f);
+		glm::mat4 projection(1.0f);
+		glm::mat4 view(1.0f);
+		
+		//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
+		projection = glm::ortho(0.0f, SCREEN_WITDH, SCREEN_HEIGTH, 0.0f, 0.1f, 100.0f);
+
+		//p->SetUniformMat4f("u_Model", model);
+		p->SetUniformMat4f("u_Proj", projection);
+		p->SetUniformMat4f("u_View", view);
+		
+		glDrawArrays(GL_POINTS, 0, p->Amount());
+
+		input();
+		p->Update(mousex, mousey);
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(Window);
@@ -48,6 +63,8 @@ bool EntryPoint::Run()
 		/* Poll for and process events */
 		glfwPollEvents();
 	}
+
+	delete p;
 
 	return 0;
 }
@@ -61,7 +78,7 @@ void EntryPoint::glfwinit()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	Window = glfwCreateWindow(640, 480, "The-Ripple", NULL, NULL);
+	Window = glfwCreateWindow(SCREEN_WITDH, SCREEN_HEIGTH, "The-Ripple", NULL, NULL);
 	if (!Window)
 	{
 		glfwTerminate();
@@ -84,21 +101,20 @@ void EntryPoint::gladinit()
 
 void EntryPoint::input()
 {
-	if (glfwGetMouseButton(Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	if (glfwGetMouseButton(Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && releasd)
 	{
-		if(releasd)
-		{
-			glfwGetCursorPos(Window, &mousex, &mousey);
-			releasd = 0;
-		}
-		
+		glfwGetCursorPos(Window, &mousex, &mousey);
+		releasd = 0;
+		std::cout << mousex << ", " << mousey << ": " << releasd << std::endl;
 	}
-	else if (glfwGetMouseButton(Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+	else if (glfwGetMouseButton(Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE && !releasd)
 	{
-		if (!releasd)
-		{
-			glfwGetCursorPos(Window, &mousex, &mousey);
-			releasd = 1;
-		}
+		glfwGetCursorPos(Window, &mousex, &mousey);
+		releasd = 1;
+		std::cout << mousex << ", " << mousey << ": " << releasd << std::endl;
+	}
+	else
+	{
+		mousex, mousey = -1.0f;
 	}
 }

@@ -10,14 +10,15 @@ public:
 	data();
 	~data();
 
-	void CreateVertexBuffer(GLsizei amount, std::vector<float> data, GLuint usage);
+	void CreateVertexBuffer(GLsizei amount, GLsizei size, std::vector<float> data, GLuint usage);
+	void CreateVertexBuffer(GLsizei amount, GLsizei size, void* data, GLuint usage);
 
 	void CreateVertexArray(GLsizei amount);
 
 	void AddAttribPointer(GLint size, GLuint type, GLboolean normalized, GLsizei stride, const void* pointer);
 
 	void Bind(GLuint type, GLuint index);
-	void UnBind();
+	void UnBind(GLuint type);
 
 private:
 

@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <algorithm>
 
 //OpenGL stuff
 #include <glad/glad.h>

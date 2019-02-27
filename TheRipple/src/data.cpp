@@ -16,12 +16,20 @@ data::~data()
 }
 
 //Binds the created buffer.
-void data::CreateVertexBuffer(GLsizei amount, std::vector<float> data, GLuint usage)
+void data::CreateVertexBuffer(GLsizei amount, GLsizei size, std::vector<float> data, GLuint usage)
 {
 	VBOs.push_back(0);
 	glGenBuffers(amount, &VBOs.back());
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs.back());
-	glBufferData(GL_ARRAY_BUFFER, data.size() , data.data(), usage);
+	glBufferData(GL_ARRAY_BUFFER, size , data.data(), usage);
+}
+
+void data::CreateVertexBuffer(GLsizei amount, GLsizei size, void* data, GLuint usage)
+{
+	VBOs.push_back(0);
+	glGenBuffers(amount, &VBOs.back());
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs.back());
+	glBufferData(GL_ARRAY_BUFFER, size, data, usage);
 }
 
 //Binds the created array.
@@ -56,7 +64,18 @@ void data::Bind(GLuint type, GLuint index)
 	}
 }
 
-void data::UnBind()
+void data::UnBind(GLuint type)
 {
-	//not in use right now.
+	if (type == GL_ARRAY_BUFFER)
+	{
+		glBindBuffer(type, 0);
+	}
+	else if (type == GL_VERTEX_ARRAY)
+	{
+		glBindBuffer(type, 0);
+	}
+	else if (type == GL_ELEMENT_ARRAY_BUFFER)
+	{
+		glBindBuffer(type, 0);
+	}
 }

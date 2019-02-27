@@ -15,7 +15,7 @@ private:
 
 	GLFWwindow* Window;
 
-	std::vector<data> dv;
+	Particle* p;
 
 	double mousex, mousey;
 	int releasd;
