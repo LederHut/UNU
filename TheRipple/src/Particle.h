@@ -24,7 +24,9 @@ public:
 	Particle();
 	~Particle();
 
-	void Update(double mousex, double mousey);
+	void Update();
+
+	void Brush(glm::fvec3 pressed, float range);
 
 	size_t Amount() { return Particles.size(); }
 
@@ -35,8 +37,11 @@ private:
 	std::vector<particle> Particles;
 
 	std::vector<float> ParticlePointCoords;
+	std::vector<float> BrushPoints;
 
 	std::vector<unsigned int> DeadParticles;
+
+
 
 };
 

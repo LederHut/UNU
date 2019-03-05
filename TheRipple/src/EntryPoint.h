@@ -17,8 +17,11 @@ private:
 
 	Particle* p;
 
-	double mousex, mousey;
+	glm::fvec3 Pressed;
+	glm::fvec3 Releasd;
+
 	int releasd;
+	int nothing;
 
 	void glfwinit();
 	void gladinit();

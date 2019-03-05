@@ -19,7 +19,7 @@ Particle::~Particle()
 {
 }
 
-void Particle::Update(double mousex, double mousey)
+void Particle::Update()
 {
 	//1. update lifetime of particles
 	if (!Particles.empty())
@@ -32,54 +32,83 @@ void Particle::Update(double mousex, double mousey)
 			else if (p.lifetime == 0)
 			{
 				DeadParticles.push_back(p.index);
-				std::cout << "dead" << std::endl;
+
 				p.lifetime--;
+				p.pos.z = 1.0f;
+
+				std::vector<float> pos{ p.pos.x,p.pos.y,p.pos.z };
+
+				glBufferSubData(GL_ARRAY_BUFFER, p.index * (3 * sizeof(float)), 3 * sizeof(float), pos.data());
 			}
 		}
 	}
 	//3. create new particle
-	if (Particles.size() != MAX_PARTICLES)
+	if (Particles.size() + BrushPoints.size() / 3 < MAX_PARTICLES)
 	{
-		if (mousex >= 0 && mousey >= 0)
+		if (!BrushPoints.empty())
 		{
-			particle p;
+			for (size_t i = 0; i < BrushPoints.size();)
+			{
+				particle p;
 
-			p.pos.x = mousex;
-			p.pos.y = mousey;
-			p.pos.z = 0.0f;
-			
-			glm::normalize(p.pos);
+				p.pos.x = BrushPoints[i++];
+				p.pos.y = BrushPoints[i++];
+				p.pos.z = 0.0f;
+				i++;
 
-			std::vector<float> pos{ p.pos.x,p.pos.y,p.pos.z };
+				std::vector<float> pos{ p.pos.x,p.pos.y,p.pos.z };
 
-			p.index = Particles.size();
+				p.index = Particles.size();
 
-			Particles.push_back(p);
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, p.index * (3 * sizeof(float)), 3 * sizeof(float), pos.data()));
-
+				Particles.push_back(p);
+				glBufferSubData(GL_ARRAY_BUFFER, p.index * (3 * sizeof(float)), 3 * sizeof(float), pos.data());
+			}
+			BrushPoints = std::vector<float>();
 		}
 	}
-	else if(!DeadParticles.empty())
+	else if(!DeadParticles.empty() && DeadParticles.size() >= BrushPoints.size() / 3)
 	{
-		if (mousex >= 0 && mousey >= 0)
+		if (!BrushPoints.empty())
 		{
-			particle p;
+			for (size_t i = 0; i < BrushPoints.size();)
+			{
+				particle p;
 
-			p.pos.x = mousex;
-			p.pos.y = mousey;
-			p.pos.z = 1.0f;
-			p.index = DeadParticles.back();
+				p.pos.x = BrushPoints[i++];
+				p.pos.y = BrushPoints[i++];
+				p.pos.z = 0.0f;
+				i++;
 
-			std::vector<float> pos{ p.pos.x,p.pos.y,p.pos.z };
+				std::vector<float> pos{ p.pos.x,p.pos.y,p.pos.z };
 
-			Particles[DeadParticles.back()] = p;
+				Particles[DeadParticles.back()] = p;
 
-			DeadParticles.pop_back();
+				DeadParticles.pop_back();
 
-			//bind the buffer before
-			glBufferSubData(GL_ARRAY_BUFFER, p.index * (3 * sizeof(float)), 3 * sizeof(float), pos.data());
+				glBufferSubData(GL_ARRAY_BUFFER, p.index * (3 * sizeof(float)), 3 * sizeof(float), pos.data());
+			}
+			BrushPoints = std::vector<float>();
 		}
 	}
 	//4. buffer the data
 	
+}
+
+void Particle::Brush(glm::fvec3 pressed,float range)
+{
+	std::vector<float> points;
+
+	for (float x = 0; x < range; x++)
+	{
+		for (float y = 0; y < range; y++)
+		{
+			std::vector<float> p{	pressed.x + x, pressed.y + y, 0.0f,
+									pressed.x + x, (pressed.y - range) + y, 0.0f,
+									(pressed.x - range) + x, pressed.y + y, 0.0f,
+									(pressed.x - range) + x, (pressed.y - range) + y, 0.0f	};
+			points.insert(std::end(points),std::begin(p),std::end(p));
+		}
+	}
+
+	BrushPoints = points;
 }

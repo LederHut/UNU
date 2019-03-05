@@ -7,9 +7,9 @@
 EntryPoint::EntryPoint() :
 	Window(nullptr),
 	p(nullptr),
-	mousex(0),
-	mousey(0),
-	releasd(1)
+	releasd(1),
+	Releasd(-1.0f, -1.0f, 0.0f),
+	Pressed(-1.0f, -1.0f, 0.0f)
 {
 	glfwinit();
 	gladinit();
@@ -36,7 +36,6 @@ bool EntryPoint::Run()
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//draw our first triangle
 		p->UseShader();
 		p->Bind(GL_VERTEX_ARRAY, 0);
 
@@ -55,7 +54,11 @@ bool EntryPoint::Run()
 		glDrawArrays(GL_POINTS, 0, p->Amount());
 
 		input();
-		p->Update(mousex, mousey);
+		if (!releasd)
+		{
+			p->Brush(Pressed, 3.0f);
+		}
+		p->Update();
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(Window);
@@ -103,18 +106,18 @@ void EntryPoint::input()
 {
 	if (glfwGetMouseButton(Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && releasd)
 	{
+		double mousex(0), mousey(0);
 		glfwGetCursorPos(Window, &mousex, &mousey);
 		releasd = 0;
 		std::cout << mousex << ", " << mousey << ": " << releasd << std::endl;
+		Pressed = glm::fvec3(mousex, mousey, 0.0f);
 	}
 	else if (glfwGetMouseButton(Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE && !releasd)
 	{
+		double mousex(0), mousey(0);
 		glfwGetCursorPos(Window, &mousex, &mousey);
 		releasd = 1;
 		std::cout << mousex << ", " << mousey << ": " << releasd << std::endl;
-	}
-	else
-	{
-		mousex, mousey = -1.0f;
+		Releasd = glm::fvec3(mousex, mousey, 0.0f);
 	}
 }
