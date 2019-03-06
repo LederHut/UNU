@@ -56,6 +56,8 @@ void Particle::Update()
 				p.pos.z = 0.0f;
 				i++;
 
+				p.lifetime += (3 * i);
+
 				std::vector<float> pos{ p.pos.x,p.pos.y,p.pos.z };
 
 				p.index = Particles.size();
@@ -64,6 +66,7 @@ void Particle::Update()
 				glBufferSubData(GL_ARRAY_BUFFER, p.index * (3 * sizeof(float)), 3 * sizeof(float), pos.data());
 			}
 			BrushPoints = std::vector<float>();
+			std::cout << Particles.size() << std::endl;
 		}
 	}
 	else if(!DeadParticles.empty() && DeadParticles.size() >= BrushPoints.size() / 3)
@@ -79,8 +82,11 @@ void Particle::Update()
 				p.pos.z = 0.0f;
 				i++;
 
+				p.lifetime += (3 * i);
+
 				std::vector<float> pos{ p.pos.x,p.pos.y,p.pos.z };
 
+				p.index = Particles[DeadParticles.back()].index;
 				Particles[DeadParticles.back()] = p;
 
 				DeadParticles.pop_back();

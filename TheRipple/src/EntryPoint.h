@@ -21,7 +21,7 @@ private:
 	glm::fvec3 Releasd;
 
 	int releasd;
-	int nothing;
+	int brushed;
 
 	void glfwinit();
 	void gladinit();

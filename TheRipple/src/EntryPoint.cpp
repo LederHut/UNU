@@ -8,6 +8,7 @@ EntryPoint::EntryPoint() :
 	Window(nullptr),
 	p(nullptr),
 	releasd(1),
+	brushed(),
 	Releasd(-1.0f, -1.0f, 0.0f),
 	Pressed(-1.0f, -1.0f, 0.0f)
 {
@@ -54,9 +55,10 @@ bool EntryPoint::Run()
 		glDrawArrays(GL_POINTS, 0, p->Amount());
 
 		input();
-		if (!releasd)
+		if (!brushed && !releasd)
 		{
-			p->Brush(Pressed, 3.0f);
+			p->Brush(Pressed, 20.0f);
+			brushed = 1;
 		}
 		p->Update();
 
@@ -117,7 +119,8 @@ void EntryPoint::input()
 		double mousex(0), mousey(0);
 		glfwGetCursorPos(Window, &mousex, &mousey);
 		releasd = 1;
-		std::cout << mousex << ", " << mousey << ": " << releasd << std::endl;
+		brushed = 0;
+		//std::cout << mousex << ", " << mousey << ": " << releasd << std::endl;
 		Releasd = glm::fvec3(mousex, mousey, 0.0f);
 	}
 }
