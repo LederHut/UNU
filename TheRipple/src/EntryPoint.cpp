@@ -51,6 +51,7 @@ bool EntryPoint::Run()
 		//p->SetUniformMat4f("u_Model", model);
 		p->SetUniformMat4f("u_Proj", projection);
 		p->SetUniformMat4f("u_View", view);
+		//p->SetUniform4f("u_Gravity",);
 		
 		glDrawArrays(GL_POINTS, 0, p->Amount());
 

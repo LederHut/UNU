@@ -1,7 +1,8 @@
 #pragma once
 
-#define MAX_PARTICLES 10000
-#define PARTICLE_LIFETIME 10000.0f //equals 1000 frames
+#define MAX_PARTICLES 1000000
+#define PARTICLE_LIFETIME 1000.0f //equals 1000 frames
+#define PARTICLE_MASS 0.753f // equal to the mass of 5 billion dust particles
 
 #include "data.h"
 
@@ -10,9 +11,13 @@
 
 struct particle
 {
-	glm::fvec3 pos;
+	glm::fvec3 pos = { 0.0f, 0.0f, 0.0f };
+	glm::fvec3 velocity = { 0.0f, 0.2123f, 0.0f };
 	//glm::fvec4 color; //not in use yet
+
 	float lifetime = PARTICLE_LIFETIME;
+	float mass = PARTICLE_MASS;
+
 	unsigned int index = 0;
 };
 
@@ -36,9 +41,10 @@ private:
 
 	std::vector<particle> Particles;
 
-	std::vector<float> ParticlePointCoords;
+	std::vector<float> PositionData;
 	std::vector<float> BrushPoints;
 
+	std::vector<unsigned int> AliveParticles;
 	std::vector<unsigned int> DeadParticles;
 
 

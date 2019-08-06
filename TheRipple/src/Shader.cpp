@@ -29,7 +29,7 @@ void Shader::LoadShader(std::string name, GLuint type)
 
 		glShaderSource(VerID, 1, (const GLchar**)&src, NULL);
 
-		glCompileShader(VerID);
+		GLCall(glCompileShader(VerID));
 
 		glGetShaderiv(VerID, GL_COMPILE_STATUS, &success);
 		if (!success)
@@ -48,7 +48,7 @@ void Shader::LoadShader(std::string name, GLuint type)
 
 		glShaderSource(FragID, 1, (const GLchar**)&src, NULL);
 
-		glCompileShader(FragID);
+		GLCall(glCompileShader(FragID));
 
 		glGetShaderiv(FragID, GL_COMPILE_STATUS, &success);
 		if (!success)
