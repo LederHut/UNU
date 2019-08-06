@@ -1,4 +1,6 @@
 # Directories
-.vs/
-x64/
-Debug/
+.vs
+# Directories
+.Debug
+# Directories
+.x64
